@@ -107,7 +107,7 @@ module.exports = {
         data[key] = data[key].join(',');
       }
 
-      data[key] = typeof data[key] === 'string' ? data[key] : '';
+      data[key] = typeof data[key] === 'string' ? data[key] : JSON.stringify(data[key]);
     }
 
     async function getHeaderRow(target) {
