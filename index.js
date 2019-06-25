@@ -146,7 +146,7 @@ module.exports = {
         }
       })
         .catch(err => {
-          throw Error(err);
+          self.apos.utils.error(err);
         });
     }
   }
