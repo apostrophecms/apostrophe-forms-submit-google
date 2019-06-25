@@ -1,0 +1,39 @@
+{
+  "name": "apostrophe-forms-submit-google",
+  "version": "0.0.1-alpha",
+  "description": "Google Sheets submission for Apostrophe Forms",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apostrophecms/apostrophe-forms-submit-google.git"
+  },
+  "keywords": [
+    "apostrophecms",
+    "apostrophe-cms",
+    "Google Sheets",
+    "CMS forms"
+  ],
+  "author": "P'unk Ave",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apostrophecms/apostrophe-forms-submit-google/issues"
+  },
+  "homepage": "https://github.com/apostrophecms/apostrophe-forms-submit-google#readme",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-apostrophe": "^2.0.2",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "dependencies": {
+    "googleapis": "^39.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
