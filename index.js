@@ -11,7 +11,7 @@ module.exports = {
         {
           label: 'Yes',
           value: true,
-          showFields: [ 'googleSpreadsheetId' ]
+          showFields: [ 'googleSpreadsheetId', 'googleSheetName' ]
         }
       ]
     },
