@@ -19,7 +19,14 @@ module.exports = {
       name: 'googleSpreadsheetId',
       label: 'Google Spreadsheet ID',
       type: 'string',
+      required: true,
       htmlHelp: '<a href="https://developers.google.com/sheets/api/guides/concepts#spreadsheet_id">The ID is found in the spreadsheet URL</a>: https://docs.google.com/spreadsheets/d/<strong>spreadsheetId</strong>/edit#gid=0'
+    },
+    {
+      name: 'googleSheetName',
+      label: 'Google Spreadsheet Sheet Name',
+      type: 'string',
+      htmlHelp: 'The name of the sheet tab in your Google spreadsheet. If not provided, this is assumed to be "Sheet1", the default initial sheet name.'
     }
   ],
   construct: async function (self, options) {
@@ -27,7 +34,8 @@ module.exports = {
       if (group.name === 'afterSubmit') {
         group.fields.push(
           'googleSheetSubmissions',
-          'googleSpreadsheetId'
+          'googleSpreadsheetId',
+          'googleSheetName'
         );
       }
       return group;
@@ -54,9 +62,13 @@ module.exports = {
     if (auth) {
       self.on('submission', 'googleSheetSubmission', async function (req, form, data) {
         if (form.googleSheetSubmissions === true) {
+          const target = {
+            spreadsheetId: form.googleSpreadsheetId,
+            sheetName: form.googleSheetName || 'Sheet1'
+          };
 
           // Get the header row titles.
-          const header = await getHeaderRow(form.googleSpreadsheetId);
+          const header = await getHeaderRow(target);
 
           // Rework form submission data to match headers. If no column exists for a form value, add it.
           const liveColumns = [...header];
@@ -78,19 +90,19 @@ module.exports = {
 
           // Update the spreadsheet header if necessary.
           if (liveColumns.length !== header.length) {
-            await updateHeader(form.googleSpreadsheetId, header);
+            await updateHeader(header, target);
           }
           // Make post request to the google sheet.
-          await appendSubmission(form.googleSpreadsheetId, newRow);
+          await appendSubmission(newRow, target);
         }
       });
     }
 
-    async function getHeaderRow(spreadsheetId) {
+    async function getHeaderRow(target) {
       return sheets.spreadsheets.values.get({
-        spreadsheetId: spreadsheetId,
+        spreadsheetId: target.spreadsheetId,
         majorDimension: 'ROWS',
-        range: 'Sheet1!1:1'
+        range: `${target.sheetName}!1:1`
       })
         .then(result => {
           return result.data.values ? result.data.values[0] : [];
@@ -101,14 +113,14 @@ module.exports = {
         });
     }
 
-    async function updateHeader(spreadsheetId, newHeader) {
+    async function updateHeader(newHeader, target) {
       return sheets.spreadsheets.values.update({
-        spreadsheetId: spreadsheetId,
-        range: 'Sheet1!1:1',
+        spreadsheetId: target.spreadsheetId,
+        range: `${target.sheetName}!1:1`,
         valueInputOption: 'RAW',
         responseDateTimeRenderOption: 'FORMATTED_STRING',
         resource: {
-          "range": 'Sheet1!1:1',
+          "range": `${target.sheetName}!1:1`,
           "majorDimension": 'ROWS',
           "values": [
             newHeader
@@ -120,10 +132,10 @@ module.exports = {
         });
     }
 
-    async function appendSubmission(spreadsheetId, newRow) {
+    async function appendSubmission(newRow, target) {
       await sheets.spreadsheets.values.append({
-        spreadsheetId: spreadsheetId,
-        range: 'Sheet1',
+        spreadsheetId: target.spreadsheetId,
+        range: `${target.sheetName}`,
         valueInputOption: 'USER_ENTERED',
         insertDataOption: 'INSERT_ROWS',
         responseDateTimeRenderOption: 'FORMATTED_STRING',
