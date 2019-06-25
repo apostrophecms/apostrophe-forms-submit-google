@@ -33,8 +33,9 @@ module.exports = {
       return group;
     });
 
-    // Get ENV variable for API auth.
-    // process.env.GOOGLE_APPLICATION_CREDENTIALS = `${__dirname}/credentials.json`;
+    // Set the environment variable for API auth.
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+      `${__dirname}/credentials.json`;
 
     let auth;
 
@@ -44,7 +45,7 @@ module.exports = {
         scopes: ['https://www.googleapis.com/auth/spreadsheets']
       });
     } catch (error) {
-      console.error('⚠️ Google Authentication Error: ', error);
+      self.apos.utils.error('⚠️ Google Authentication Error: ', error);
       return;
     }
 
@@ -95,7 +96,7 @@ module.exports = {
           return result.data.values ? result.data.values[0] : [];
         })
         .catch(err => {
-          console.error(err);
+          self.apos.utils.error(err);
           return [];
         });
     }
@@ -115,7 +116,7 @@ module.exports = {
         }
       })
         .catch(err => {
-          console.error(err);
+          self.apos.utils.error(err);
         });
     }
 

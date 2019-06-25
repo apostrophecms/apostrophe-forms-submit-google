@@ -1,6 +1,6 @@
 # Apostrophe Forms Google Sheets Submission
 
-For use with ApostropheCMS 2.x
+For use with ApostropheCMS 2.x. Requires Node v8.
 
 ## Usage
 1. Create API project
