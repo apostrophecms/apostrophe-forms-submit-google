@@ -42,8 +42,10 @@ module.exports = {
     });
 
     // Set the environment variable for API auth.
+    const confFolder = self.__meta.chain[self.__meta.chain.length - 1].dirname;
+
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-      `${__dirname}/credentials.json`;
+      `${confFolder}/credentials.json`;
 
     let auth;
 
