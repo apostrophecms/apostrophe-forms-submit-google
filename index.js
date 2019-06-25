@@ -77,15 +77,17 @@ module.exports = {
           const newRow = [];
 
           header.forEach(column => {
+            formatData(data, column);
+
             newRow.push(data[column] || '');
+
             delete data[column];
           });
 
           // Add a column header for any data properties left-over.
           for (var key in data) {
-            if (Array.isArray(data[key])) {
-              data[key] = data[key].join(',');
-            }
+            formatData(data, key);
+
             header.push(key);
             newRow.push(data[key]);
           }
@@ -98,6 +100,14 @@ module.exports = {
           await appendSubmission(newRow, target);
         }
       });
+    }
+
+    function formatData(data, key) {
+      if (Array.isArray(data[key])) {
+        data[key] = data[key].join(',');
+      }
+
+      data[key] = typeof data[key] === 'string' ? data[key] : '';
     }
 
     async function getHeaderRow(target) {
