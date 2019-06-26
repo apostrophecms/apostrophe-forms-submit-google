@@ -29,7 +29,7 @@ module.exports = {
       htmlHelp: 'The name of the sheet tab in your Google spreadsheet. If not provided, this is assumed to be "Sheet1", the default initial sheet name.'
     }
   ],
-  construct: async function (self, options) {
+  construct: function (self, options) {
     options.arrangeFields = options.arrangeFields.map(group => {
       if (group.name === 'afterSubmit') {
         group.fields.push(
@@ -40,7 +40,8 @@ module.exports = {
       }
       return group;
     });
-
+  },
+  afterConstruct: async function (self) {
     // Set the environment variable for API auth.
     const confFolder = self.__meta.chain[self.__meta.chain.length - 1].dirname;
 
