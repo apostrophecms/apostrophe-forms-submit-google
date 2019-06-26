@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-forms-submit-google",
-  "version": "0.0.1-alpha",
+  "version": "1.0.0",
   "description": "Google Sheets submission for Apostrophe Forms",
   "main": "index.js",
   "scripts": {
