@@ -4,7 +4,7 @@
   "description": "Google Sheets submission for Apostrophe Forms",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -35,5 +35,8 @@
     "googleapis": "^39.2.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
+  },
+  "peerDependencies": {
+    "apostrophe-forms": "2.x"
   }
 }
