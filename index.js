@@ -86,7 +86,7 @@ module.exports = {
           });
 
           // Add a column header for any data properties left-over.
-          for (var key in data) {
+          for (const key in data) {
             formatData(data, key);
 
             header.push(key);
@@ -112,18 +112,13 @@ module.exports = {
     }
 
     async function getHeaderRow(target) {
-      return sheets.spreadsheets.values.get({
+      const headerRes = await sheets.spreadsheets.values.get({
         spreadsheetId: target.spreadsheetId,
         majorDimension: 'ROWS',
         range: `${target.sheetName}!1:1`
-      })
-        .then(result => {
-          return result.data.values ? result.data.values[0] : [];
-        })
-        .catch(err => {
-          self.apos.utils.error(err);
-          return [];
-        });
+      });
+
+      return headerRes.data.values ? headerRes.data.values[0] : [];
     }
 
     async function updateHeader(newHeader, target) {
@@ -139,10 +134,7 @@ module.exports = {
             newHeader
           ]
         }
-      })
-        .catch(err => {
-          self.apos.utils.error(err);
-        });
+      });
     }
 
     async function appendSubmission(newRow, target) {
@@ -157,10 +149,7 @@ module.exports = {
             newRow
           ]
         }
-      })
-        .catch(err => {
-          self.apos.utils.error(err);
-        });
+      });
     }
   }
 };
