@@ -59,7 +59,7 @@ module.exports = {
       self.apos.utils.error('⚠️ Google Authentication Error: ', error);
       return;
     }
-
+    const unused;
     const sheets = google.sheets({ version: 'v4', auth });
 
     if (auth) {
