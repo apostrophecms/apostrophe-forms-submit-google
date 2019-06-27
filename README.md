@@ -1,6 +1,6 @@
 # Apostrophe Forms Google Sheets Submission
 
-For use with ApostropheCMS 2.x. Requires Node v8 and `apostrophe-forms`.
+For use with ApostropheCMS 2.x. Requires Node v8 and `apostrophe-forms v2.x`.
 
 This module adds an additional form submission option to Apostrophe Forms. It allows website managers to configure individual forms to submit to a specific Google spreadsheet. The sheet must exist, but does not necessarily need to be set up with column headings before use. If you wish to set column headings directly (e.g., to set the order of columns yourself), those column headings must exactly match the *field name* from the Apostrophe form.
 
