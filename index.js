@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const fs = require('fs');
 
 module.exports = {
   improve: 'apostrophe-forms',
@@ -132,23 +133,35 @@ module.exports = {
   afterConstruct: async function (self) {
     // Set the environment variable for API auth.
     const confFolder = self.__meta.chain[self.__meta.chain.length - 1].dirname;
+    let credentialsFile;
+
+    if (fs.existsSync(`${confFolder}/credentials.json`)) {
+      credentialsFile = `${confFolder}/credentials.json`;
+    }
 
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-      `${confFolder}/credentials.json`;
+      credentialsFile;
 
     let auth;
 
-    try {
-      // Make google auth connection.
-      auth = await google.auth.getClient({
-        scopes: ['https://www.googleapis.com/auth/spreadsheets']
-      });
-    } catch (error) {
-      self.apos.utils.error('⚠️ Google Authentication Error: ', error);
-      return;
-    }
+    if (
+      process.env.GOOGLE_APPLICATION_CREDENTIALS &&
+      process.env.GOOGLE_APPLICATION_CREDENTIALS !== 'undefined'
+    ) {
+      try {
+        // Make google auth connection.
+        auth = await google.auth.getClient({
+          scopes: ['https://www.googleapis.com/auth/spreadsheets']
+        });
+      } catch (error) {
+        self.apos.utils.error('⚠️ Google Authentication Error: ', error);
+        return;
+      }
 
-    self.sheets = google.sheets({ version: 'v4', auth });
+      self.sheets = google.sheets({ version: 'v4', auth });
+    } else {
+      self.apos.utils.warnDev('⚠️  No credentials found for apostrophe-forms-submit-google.');
+    }
 
     if (auth) {
       self.on('submission', 'googleSheetSubmission', self.sendToGoogle);
