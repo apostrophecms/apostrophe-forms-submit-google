@@ -50,7 +50,17 @@ module.exports = {
         };
 
         // Get the header row titles.
-        const header = await getHeaderRow(target);
+        let header;
+
+        try {
+          header = await getHeaderRow(target);
+        } catch (err) {
+          self.apos.utils.error(err);
+
+          self.apos.notify(req, 'There was an error submitting to Google Sheets.', { type: 'error' });
+
+          return null;
+        }
 
         // Rework form submission data to match headers. If no column exists for a form value, add it.
         const liveColumns = [...header];
