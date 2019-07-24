@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const fs = require('fs');
+const has = require('lodash.has');
 
 module.exports = {
   improve: 'apostrophe-forms',
@@ -27,7 +28,7 @@ module.exports = {
       name: 'googleSheetName',
       label: 'Google Spreadsheet Sheet Name',
       type: 'string',
-      htmlHelp: 'The name of the sheet tab in your Google spreadsheet. If not provided, this is assumed to be "Sheet1", the default initial sheet name.'
+      help: 'The name of the sheet tab in your Google spreadsheet where you want the submission appended. If not provided, the first sheet of the spreadsheet will be used.'
     }
   ],
   construct: function (self, options) {
@@ -44,9 +45,27 @@ module.exports = {
 
     self.sendToGoogle = async function (req, form, data) {
       if (form.googleSheetSubmissions === true) {
+        if (!form.googleSheetName) {
+          try {
+            form.googleSheetName = await getFirstSheet(form.googleSpreadsheetId);
+          } catch (error) {
+            form.googleSheetName = null;
+            self.apos.utils.error('⚠️ Google sheet info request error: ', error);
+          }
+
+          if (!form.googleSheetName) {
+            self.apos.notify(req, 'Error retrieving Google Sheet information. Please check the spreadsheet ID and and spreadsheet sharing settings.', {
+              type: 'error',
+              dismiss: true
+            });
+
+            return null;
+          }
+        }
+
         const target = {
           spreadsheetId: form.googleSpreadsheetId,
-          sheetName: form.googleSheetName || 'Sheet1'
+          sheetName: form.googleSheetName
         };
 
         // Get the header row titles.
@@ -100,6 +119,20 @@ module.exports = {
       }
 
       data[key] = typeof data[key] === 'string' ? data[key] : JSON.stringify(data[key]);
+    }
+
+    async function getFirstSheet(spreadsheetId) {
+      let spreadsheet = await self.sheets.spreadsheets.get({
+        spreadsheetId: spreadsheetId
+      });
+      spreadsheet = {};
+      if (!spreadsheet || !has(spreadsheet, [
+        'data', 'sheets', 0, 'properties', 'title'
+      ])) {
+        return null;
+      }
+
+      return spreadsheet.data.sheets[0].properties.title;
     }
 
     async function getHeaderRow(target) {
