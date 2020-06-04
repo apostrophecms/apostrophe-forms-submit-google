@@ -54,10 +54,12 @@ module.exports = {
           }
 
           if (!form.googleSheetName) {
-            self.apos.notify(req, 'Error retrieving Google Sheet information. Please check the spreadsheet ID and and spreadsheet sharing settings.', {
-              type: 'error',
-              dismiss: true
-            });
+            if (req.user) {
+              self.apos.notify(req, 'Error retrieving Google Sheet information. Please check the spreadsheet ID and and spreadsheet sharing settings.', {
+                type: 'error',
+                dismiss: true
+              });
+            }
 
             return null;
           }
@@ -76,11 +78,12 @@ module.exports = {
         } catch (err) {
           self.apos.utils.error('⚠️ apostrophe-forms Google Sheets submission error: ', err);
 
-          self.apos.notify(req, 'There was an error submitting to Google Sheets.', {
-            type: 'error',
-            dismiss: true
-          });
-
+          if (req.user) {
+            self.apos.notify(req, 'There was an error submitting to Google Sheets.', {
+              type: 'error',
+              dismiss: true
+            });
+          }
           return null;
         }
 
@@ -125,13 +128,11 @@ module.exports = {
       let spreadsheet = await self.sheets.spreadsheets.get({
         spreadsheetId: spreadsheetId
       });
-      spreadsheet = {};
       if (!spreadsheet || !has(spreadsheet, [
         'data', 'sheets', 0, 'properties', 'title'
       ])) {
         return null;
       }
-
       return spreadsheet.data.sheets[0].properties.title;
     }
 
