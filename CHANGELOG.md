@@ -1,3 +1,8 @@
+## 1.0.4, 2020-07-01
+
+- Documentation was incorrect re: where to put `credentials.json`. Because this module uses `improve`, it should go in the project level `lib/modules/apostrophe-forms/credentials.json` file, not `lib/modules/apostrophe-forms-submit-google/credentials.json`.
+- Previously this module broke project level use of `addFields` for `apostrophe-forms`. This has been fixed.
+
 ## 1.0.3, 2020-06-17
 
 - Works properly when no sheet name is specified.
