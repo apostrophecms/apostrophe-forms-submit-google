@@ -4,34 +4,34 @@ const has = require('lodash.has');
 
 module.exports = {
   improve: 'apostrophe-forms',
-  addFields: [
-    {
-      name: 'googleSheetSubmissions',
-      label: 'Submit to Google Spreadsheets',
-      type: 'boolean',
-      choices: [
-        {
-          label: 'Yes',
-          value: true,
-          showFields: [ 'googleSpreadsheetId', 'googleSheetName' ]
-        }
-      ]
-    },
-    {
-      name: 'googleSpreadsheetId',
-      label: 'Google Spreadsheet ID',
-      type: 'string',
-      required: true,
-      htmlHelp: '<a href="https://developers.google.com/sheets/api/guides/concepts#spreadsheet_id">The ID is found in the spreadsheet URL</a>: https://docs.google.com/spreadsheets/d/<strong>spreadsheetId</strong>/edit#gid=0'
-    },
-    {
-      name: 'googleSheetName',
-      label: 'Google Spreadsheet Sheet Name',
-      type: 'string',
-      help: 'The name of the sheet tab in your Google spreadsheet where you want the submission appended. If not provided, the first sheet of the spreadsheet will be used.'
-    }
-  ],
   construct: function (self, options) {
+    options.addFields = [
+      {
+        name: 'googleSheetSubmissions',
+        label: 'Submit to Google Spreadsheets',
+        type: 'boolean',
+        choices: [
+          {
+            label: 'Yes',
+            value: true,
+            showFields: [ 'googleSpreadsheetId', 'googleSheetName' ]
+          }
+        ]
+      },
+      {
+        name: 'googleSpreadsheetId',
+        label: 'Google Spreadsheet ID',
+        type: 'string',
+        required: true,
+        htmlHelp: '<a href="https://developers.google.com/sheets/api/guides/concepts#spreadsheet_id">The ID is found in the spreadsheet URL</a>: https://docs.google.com/spreadsheets/d/<strong>spreadsheetId</strong>/edit#gid=0'
+      },
+      {
+        name: 'googleSheetName',
+        label: 'Google Spreadsheet Sheet Name',
+        type: 'string',
+        help: 'The name of the sheet tab in your Google spreadsheet where you want the submission appended. If not provided, the first sheet of the spreadsheet will be used.'
+      }
+    ].concat(options.addFields || []);
     options.arrangeFields = options.arrangeFields.map(group => {
       if (group.name === 'afterSubmit') {
         group.fields.push(
