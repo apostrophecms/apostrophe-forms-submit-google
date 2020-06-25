@@ -1,4 +1,5 @@
 - "Date Submitted" and "Time Submitted" fields are now automatically added to the row inserted in Google Sheets.
+- An `apostrophe-forms-submit-google:before` event is now emitted just before submission to google, receiving `(req, forms, data)` as arguments. This allows a chance to modify `data` first.
 
 ## 1.0.4, 2020-07-01
 
