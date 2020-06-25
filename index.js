@@ -51,6 +51,9 @@ module.exports = {
       const timeFields = (new Date()).toISOString().match(/^(.*?)T(.*?)(\..*)$/);
       data['Date Submitted'] = timeFields[1];
       data['Time Submitted'] = timeFields[2];
+
+      await self.emit('beforeSubmit', req, form, data);
+
       if (form.googleSheetSubmissions === true) {
         if (!form.googleSheetName) {
           try {
