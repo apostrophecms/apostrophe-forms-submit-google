@@ -33,3 +33,6 @@ modules: {
 }
 ```
 
+### Note on dates and times
+
+"Date Submitted" and "Time Submitted" columns are added automatically. These are always in [UTC (Coordinated Universal Time)](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).

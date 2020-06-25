@@ -1,3 +1,5 @@
+- "Date Submitted" and "Time Submitted" fields are now automatically added to the row inserted in Google Sheets.
+
 ## 1.0.4, 2020-07-01
 
 - Documentation was incorrect re: where to put `credentials.json`. Because this module uses `improve`, it should go in the project level `lib/modules/apostrophe-forms/credentials.json` file, not `lib/modules/apostrophe-forms-submit-google/credentials.json`.
