@@ -33,3 +33,6 @@ modules: {
 }
 ```
 
+### A warning about editing the spreadsheet
+
+Please note that you must not add any empty, unlabeled columns to the spreadsheet once submissions begin. Due to the [rules of Google's spreadsheet API](https://developers.google.com/sheets/api/guides/values#appending_values) the gap will be considered as the start of a "new table" and newly appended rows will start at that column, which is probably not what you want. If this does happen, move the data over and add a header to the empty column.

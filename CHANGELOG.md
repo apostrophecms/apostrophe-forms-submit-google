@@ -1,3 +1,5 @@
+- Documented the strange but official behavior of the Google Sheets append API, which detects the "last table" in your sheet and appends rows there, sometimes in a surprising column.
+
 ## 1.0.4, 2020-07-01
 
 - Documentation was incorrect re: where to put `credentials.json`. Because this module uses `improve`, it should go in the project level `lib/modules/apostrophe-forms/credentials.json` file, not `lib/modules/apostrophe-forms-submit-google/credentials.json`.
