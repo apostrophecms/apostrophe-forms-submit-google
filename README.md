@@ -39,13 +39,13 @@ modules: {
 
 ### Modifying the submission before it is sent to Google
 
-If you wish to modify the submitted data just before it goes to Google, for instance to add a new property, you can catch the `apostrophe-forms-submit-google:before` event. Let's say we want to create a "unique key" column based on the date submitted, time submitted, and an email field in the submission:
+If you wish to modify the submitted data just before it goes to Google, for instance to add a new property, you can catch the `apostrophe-forms-submit-google:beforeSubmit` event. Let's say we want to create a "unique key" column based on the date submitted, time submitted, and an email field in the submission:
 
 ```javascript
 // In the index.js of your own module
 module.exports = {
   construct: function(self, options) {
-    self.on('apostrophe-forms-submit-google:before', 'addUniqueKey', async (req, form, data) => {
+    self.on('apostrophe-forms-submit-google:beforeSubmit', 'addUniqueKey', async (req, form, data) => {
       data['Unique Key'] = data['Date Submitted'] + data['Time Submitted'] + data.email;
     });
   }
