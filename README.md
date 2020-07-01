@@ -33,6 +33,27 @@ modules: {
 }
 ```
 
+### Note on dates and times
+
+"Date Submitted" and "Time Submitted" columns are added automatically. These are always in [UTC (Coordinated Universal Time)](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).
+
+### Modifying the submission before it is sent to Google
+
+If you wish to modify the submitted data just before it goes to Google, for instance to add a new property, you can catch the `apostrophe-forms-submit-google:beforeSubmit` event. Let's say we want to create a "unique key" column based on the date submitted, time submitted, and an email field in the submission:
+
+```javascript
+// In the index.js of your own module
+module.exports = {
+  construct: function(self, options) {
+    self.on('apostrophe-forms-submit-google:beforeSubmit', 'addUniqueKey', async (req, form, data) => {
+      data['Unique Key'] = data['Date Submitted'] + data['Time Submitted'] + data.email;
+    });
+  }
+};
+```
+
+The submitted spreadsheet rows will now include the additional column.
+
 ### Issues with column formatting
 
 This module sends data to Google Sheets "as entered," i.e. as if the it were typed by the user in Google Sheets. In most cases this does good things: dates are detected as dates, times as times, numbers as numbers, etc.
