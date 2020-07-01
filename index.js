@@ -44,7 +44,16 @@ module.exports = {
     });
 
     self.sendToGoogle = async function (req, form, data) {
+
       if (form.googleSheetSubmissions === true) {
+        // Don't modify the original, this would frustrate
+        // other custom submission handlers
+        data = Object.assign({}, data);
+        const timeFields = (new Date()).toISOString().match(/^(.*?)T(.*?)(\..*)$/);
+        data['Date Submitted'] = timeFields[1];
+        data['Time Submitted'] = timeFields[2];
+
+        await self.emit('beforeSubmit', req, form, data);
         if (!form.googleSheetName) {
           try {
             form.googleSheetName = await getFirstSheet(form.googleSpreadsheetId);

@@ -1,9 +1,11 @@
+## 1.1.0, 2020-07-01
+
+- Documented how to override Google's automatic guesses that can result in the loss of leading zeroes from phone numbers.
 - Documented the strange but official behavior of the Google Sheets append API, which detects the "last table" in your sheet and appends rows there, sometimes in a surprising column.
-
-## 1.0.4, 2020-07-01
-
 - Documentation was incorrect re: where to put `credentials.json`. Because this module uses `improve`, it should go in the project level `lib/modules/apostrophe-forms/credentials.json` file, not `lib/modules/apostrophe-forms-submit-google/credentials.json`.
 - Previously this module broke project level use of `addFields` for `apostrophe-forms`. This has been fixed.
+- "Date Submitted" and "Time Submitted" fields are now automatically added to the row inserted in Google Sheets.
+- An `apostrophe-forms-submit-google:before` event is now emitted just before submission to google, receiving `(req, forms, data)` as arguments. This allows a chance to modify `data` first.
 
 ## 1.0.3, 2020-06-17
 

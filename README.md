@@ -20,6 +20,10 @@ This module adds an additional form submission option to Apostrophe Forms. It al
 1. This can be done later by CMS users as well. There is help text in the UI directing them to make note of the spreadsheet ID and sheet name.
 2. Column headers in the Google spreadsheet must match the form field *names* (not the field labels), or else the module will add new columns to the spreadsheet.
 
+#### A warning about editing the spreadsheet
+
+Please note that you must not add any empty, unlabeled columns to the spreadsheet once submissions begin. Due to the [rules of Google's spreadsheet API](https://developers.google.com/sheets/api/guides/values#appending_values) the gap will be considered as the start of a "new table" and newly appended rows will start at that column, which is probably not what you want. If this does happen, move the data over and add a header to the empty column.
+
 ### Configure the module
 Enabled the module in your Apostrophe `app.js` file with other modules.
 
@@ -33,6 +37,31 @@ modules: {
 }
 ```
 
-### A warning about editing the spreadsheet
+### Note on dates and times
 
-Please note that you must not add any empty, unlabeled columns to the spreadsheet once submissions begin. Due to the [rules of Google's spreadsheet API](https://developers.google.com/sheets/api/guides/values#appending_values) the gap will be considered as the start of a "new table" and newly appended rows will start at that column, which is probably not what you want. If this does happen, move the data over and add a header to the empty column.
+"Date Submitted" and "Time Submitted" columns are added automatically. These are always in [UTC (Coordinated Universal Time)](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).
+
+### Modifying the submission before it is sent to Google
+
+If you wish to modify the submitted data just before it goes to Google, for instance to add a new property, you can catch the `apostrophe-forms-submit-google:beforeSubmit` event. Let's say we want to create a "unique key" column based on the date submitted, time submitted, and an email field in the submission:
+
+```javascript
+// In the index.js of your own module
+module.exports = {
+  construct: function(self, options) {
+    self.on('apostrophe-forms-submit-google:beforeSubmit', 'addUniqueKey', async (req, form, data) => {
+      data['Unique Key'] = data['Date Submitted'] + data['Time Submitted'] + data.email;
+    });
+  }
+};
+```
+
+The submitted spreadsheet rows will now include the additional column.
+
+### Issues with column formatting
+
+This module sends data to Google Sheets "as entered," i.e. as if the it were typed by the user in Google Sheets. In most cases this does good things: dates are detected as dates, times as times, numbers as numbers, etc.
+
+However in certain cases, the results may be surprising. For instance, a phone number with a leading `0` and no spaces or punctuation will lose its leading `0` because this is the standard behavior of Google Sheets when it believes it has detected a number. Google does not store the zero in this situation, it is truly gone.
+
+Fortunately you can correct this by formatting the column correctly in Google Sheets. Open the sheet, select the column that will contain phone numbers, and select "Format -> Number -> Plain text". Leading zeroes will not be removed from future submissions.
