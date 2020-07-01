@@ -20,6 +20,10 @@ This module adds an additional form submission option to Apostrophe Forms. It al
 1. This can be done later by CMS users as well. There is help text in the UI directing them to make note of the spreadsheet ID and sheet name.
 2. Column headers in the Google spreadsheet must match the form field *names* (not the field labels), or else the module will add new columns to the spreadsheet.
 
+#### A warning about editing the spreadsheet
+
+Please note that you must not add any empty, unlabeled columns to the spreadsheet once submissions begin. Due to the [rules of Google's spreadsheet API](https://developers.google.com/sheets/api/guides/values#appending_values) the gap will be considered as the start of a "new table" and newly appended rows will start at that column, which is probably not what you want. If this does happen, move the data over and add a header to the empty column.
+
 ### Configure the module
 Enabled the module in your Apostrophe `app.js` file with other modules.
 
