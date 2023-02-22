@@ -1,3 +1,9 @@
+# Changelog
+
+## UNRELEASED
+
+- Removes `apostrophe` as a peer dependency.
+
 ## 1.1.1, 2020-08-26
 
 - Uses the latest version of Google's API module (59.0.0). Compatibility has been verified.
