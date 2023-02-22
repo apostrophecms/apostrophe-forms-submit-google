@@ -36,5 +36,8 @@
     "lodash.has": "^4.5.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.6"
+  },
+  "peerDependencies": {
+    "apostrophe-forms": "1.x"
   }
 }
