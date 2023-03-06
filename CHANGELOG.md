@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.1.2, 2023-06-06
 
 - Removes `apostrophe` as a peer dependency.
 
